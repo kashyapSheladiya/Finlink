@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API
-
+  include Response
+  
   include ActionController::HttpAuthentication::Token::ControllerMethods
 
   def authenticate
@@ -22,10 +23,10 @@ class ApplicationController < ActionController::API
   private
 
   def unauthorized
-    render json: 'Unauthorized', status: :unauthorized
+    json_response "Unauthorized", false, {}, :unauthorized
   end
 
   def missing_token
-    render json: 'Missing Token', status: :bad_request
+    json_response "Missing Token", false, {}, :bad_request
   end
 end

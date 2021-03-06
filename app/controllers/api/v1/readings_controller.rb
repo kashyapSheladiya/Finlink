@@ -4,7 +4,7 @@ class Api::V1::ReadingsController < ApplicationController
 
   def index
     @readings = Api::V1::Reading.all
-    render json: @readings, status: :ok
+    json_response "All Readings", true, {readings: @readings}, :ok
   end
 
   def create
@@ -13,18 +13,18 @@ class Api::V1::ReadingsController < ApplicationController
     @reading.thermostat_id = thermostat.id
     @reading.number = increase_number(thermostat.id)
     @reading.save
-    render json: @reading, status: :created, location: @reading
+    json_response "Successfully Reading created", true, @reading, :created
   end
 
   def show
-    render json: @reading, status: :ok
+    json_response "Reading found successfully", true, {thermostat: @reading}, :ok
   end
 
   private
   def load_reading
     @reading = Api::V1::Reading.find_by(id: params[:id])
     unless @reading.present?
-      render json: "Reading not found", status: :not_found
+      json_response "Reading not found", false, {}, :not_found
     end
   end
 
