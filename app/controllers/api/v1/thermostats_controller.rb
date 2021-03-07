@@ -4,11 +4,13 @@ class Api::V1::ThermostatsController < ApplicationController
 
   def index
     @thermostats = Api::V1::Thermostat.all
-    json_response "All Thermostats", true, {thermostats: @thermostats}, :ok
+    thermostats_serializer = parse_json(@thermostats)
+    json_response "All Thermostats", true, {thermostats: thermostats_serializer}, :ok
   end
 
   def show
-    json_response "Thermostat found successfully", true, {thermostat: @thermostat}, :ok
+    thermostat_serializer = parse_json(@thermostat)
+    json_response "Thermostat found successfully", true, {thermostat: thermostat_serializer}, :ok
   end
 
   private

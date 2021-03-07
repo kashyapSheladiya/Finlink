@@ -4,7 +4,8 @@ class Api::V1::ReadingsController < ApplicationController
 
   def index
     @readings = Api::V1::Reading.all
-    json_response "All Readings", true, {readings: @readings}, :ok
+    readings_serializer = parse_json(@readings)
+    json_response "All Readings", true, {thermostats: readings_serializer}, :ok
   end
 
   def create
@@ -13,11 +14,13 @@ class Api::V1::ReadingsController < ApplicationController
     @reading.thermostat_id = thermostat.id
     @reading.number = increase_number(thermostat.id)
     @reading.save
-    json_response "Successfully Reading created", true, @reading, :created
+    reading_serializer = parse_json(@reading)
+    json_response "Reading created successfully", true, {reading: reading_serializer}, :created
   end
 
   def show
-    json_response "Reading found successfully", true, {thermostat: @reading}, :ok
+    reading_serializer = parse_json(@reading)
+    json_response "Reading found successfully", true, {reading: reading_serializer}, :ok
   end
 
   private
