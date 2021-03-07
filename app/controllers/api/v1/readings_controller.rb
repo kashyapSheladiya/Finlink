@@ -9,13 +9,9 @@ class Api::V1::ReadingsController < ApplicationController
   end
 
   def create
-    @reading = Api::V1::Reading.new(reading_params)
-    thermostat = Api::V1::Thermostat.where(household_token: get_household_token).first
-    @reading.thermostat_id = thermostat.id
-    @reading.number = increase_number(thermostat.id)
-    @reading.save
-    reading_serializer = parse_json(@reading)
-    json_response "Reading created successfully", true, {reading: reading_serializer}, :created
+    Api::V1::ReadingWorker.perform_async(reading_params.to_h, get_household_token)
+    reading = reading_params
+    json_response "Reading created successfully", true, {reading: reading}, :created
   end
 
   def show
@@ -33,14 +29,5 @@ class Api::V1::ReadingsController < ApplicationController
 
   def reading_params
     params.require(:reading).permit(:temperature, :humidity, :battery_charge)
-  end
-
-  def increase_number(id)
-    last_thermostat_reading = Api::V1::Reading.where(thermostat_id: id).last
-    unless last_thermostat_reading.present?
-      num = 1
-      return num
-    end
-    last_thermostat_reading.number += 1
   end
 end
