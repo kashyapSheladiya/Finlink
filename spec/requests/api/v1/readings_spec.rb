@@ -48,6 +48,11 @@ RSpec.describe "/api/v1/readings", type: :request do
       expect(response).to have_http_status(:created)
       expect(response.status).to eq(201)
     end
+  end
 
+  describe 'create reading' do
+    it 'should raise an error, thermostat should be present' do
+      expect{Api::V1::Reading.create!}.to raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 end
