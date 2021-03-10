@@ -15,9 +15,9 @@ ActiveRecord::Schema.define(version: 2021_03_06_144820) do
   create_table "api_v1_readings", force: :cascade do |t|
     t.integer "thermostat_id"
     t.integer "number"
-    t.decimal "temperature"
-    t.decimal "humidity"
-    t.decimal "battery_charge"
+    t.decimal "temperature", default: "0.0"
+    t.decimal "humidity", default: "0.0"
+    t.decimal "battery_charge", default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["thermostat_id"], name: "index_api_v1_readings_on_thermostat_id"

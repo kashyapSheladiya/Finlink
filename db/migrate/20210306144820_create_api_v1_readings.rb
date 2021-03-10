@@ -3,9 +3,9 @@ class CreateApiV1Readings < ActiveRecord::Migration[5.2]
     create_table :api_v1_readings do |t|
       t.references :thermostat, foreign_key: false
       t.integer :number
-      t.decimal :temperature
-      t.decimal :humidity
-      t.decimal :battery_charge
+      t.decimal :temperature, :default => 0.0
+      t.decimal :humidity, :default => 0.0
+      t.decimal :battery_charge, :default => 0.0
 
       t.timestamps
     end
